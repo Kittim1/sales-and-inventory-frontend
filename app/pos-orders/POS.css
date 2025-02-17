@@ -1,0 +1,48 @@
+/* POS.css */
+.pos-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    background-color: #f8f9fa;
+}
+
+.cart-section {
+    flex: 1;
+    padding: 20px;
+    background: white;
+}
+
+.cart-items {
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+}
+
+.cart-total {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.pos-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pay-btn {
+    background: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.sale-btn {
+    background: #dc3545;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+

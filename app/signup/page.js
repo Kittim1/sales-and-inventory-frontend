@@ -10,20 +10,21 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle } from "lucide-react";
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('');
+export default function SignupPage() {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState(null); // Holds success or error message
-  const [alertType, setAlertType] = useState(null); // "success" or "error"
+  const [role, setRole] = useState('1'); // Default role (can be changed)
+  const [message, setMessage] = useState(null);
+  const [alertType, setAlertType] = useState(null);
   const router = useRouter();
 
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     setMessage(null);
 
     const formData = new FormData();
-    formData.append('operation', 'login');
-    formData.append('json', JSON.stringify({ username: email, password }));
+    formData.append('operation', 'register');
+    formData.append('json', JSON.stringify({ username, password, role }));
 
     try {
       const response = await axios.post('http://localhost/harah-api/users.php', formData, {
@@ -32,16 +33,15 @@ export default function LoginPage() {
 
       if (response.data.status === 'success') {
         setAlertType("success");
-        setMessage("Login successful! Redirecting...");
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-
+        setMessage("Signup successful! Redirecting to login...");
+        
         // Redirect after 2 seconds
         setTimeout(() => {
-          router.push('/dashboard');
+          router.push('/');
         }, 2000);
       } else {
         setAlertType("error");
-        setMessage(response.data.message || "Invalid email or password");
+        setMessage(response.data.message || "Signup failed");
       }
     } catch (err) {
       setAlertType("error");
@@ -53,7 +53,7 @@ export default function LoginPage() {
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <Card className="w-96 p-6 shadow-lg">
         <CardHeader>
-          <h2 className="text-xl font-bold text-center">Login</h2>
+          <h2 className="text-xl font-bold text-center">Sign Up</h2>
         </CardHeader>
         <CardContent>
           {/* ✅ Alert Component for Success/Error Messages */}
@@ -65,15 +65,15 @@ export default function LoginPage() {
             </Alert>
           )}
 
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleSignup}>
             <div className="mb-4">
-              <Label htmlFor="email">Email or Phone</Label>
+              <Label htmlFor="username">Username</Label>
               <Input
-                id="email"
+                id="username"
                 type="text"
-                placeholder="Enter your email or phone"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
@@ -88,11 +88,23 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full">Login</Button>
+            <div className="mb-4">
+              <Label htmlFor="role">Role</Label>
+              <select
+                id="role"
+                className="w-full p-2 border rounded"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="1">User</option>
+                <option value="2">Admin</option>
+              </select>
+            </div>
+            <Button type="submit" className="w-full">Sign Up</Button>
           </form>
         </CardContent>
         <CardFooter className="text-center">
-          <p className="text-sm">Don't have an account? <a href="/signup" className="text-blue-500">Sign up</a></p>
+          <p className="text-sm">Already have an account? <a href="/login" className="text-blue-500">Login</a></p>
         </CardFooter>
       </Card>
     </div>
